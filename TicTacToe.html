@@ -47,7 +47,7 @@
 				<tr>
 					<td>
 						<div class="photo-container">
-							<div id="square0" class="square" onclick="square1Animate()">
+							<div id="square0" class="square" onclick="animateSquare(0)">
 							  <div class="O"></div>
 							  <div class="X"></div>
 							</div>
@@ -55,7 +55,7 @@
 					</td>
 					<td>
 						<div class="photo-container">
-							<div id="square1" class="square" onclick="square2Animate()" ondblclick="">
+							<div id="square1" class="square" onclick="animateSquare(1)" ondblclick="">
 							  <div class="O"></div>
 							  <div class="X"></div>
 							</div>
@@ -63,33 +63,7 @@
 					</td>
 					<td>
 						<div class="photo-container">
-							<div id="square2" class="square" onclick="square3Animate()">
-							  <div class="O"></div>
-							  <div class="X"></div>
-							</div>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="photo-container">
-							<div id="square3" class="square" onclick="square4Animate()">
-							  <div class="O"></div>
-							  <div class="X"></div>
-							</div>
-						</div>
-					</td>
-					<td>
-						<div class="photo-container">
-							<div id="square4" class="square" onclick="square5Animate()">
-							  <div class="O"></div>
-							  <div class="X"></div>
-							</div>
-						</div>
-					</td>
-					<td>
-						<div class="photo-container">
-							<div id="square5" class="square" onclick="square6Animate()">
+							<div id="square2" class="square" onclick="animateSquare(2)">
 							  <div class="O"></div>
 							  <div class="X"></div>
 							</div>
@@ -99,7 +73,7 @@
 				<tr>
 					<td>
 						<div class="photo-container">
-							<div id="square6" class="square" onclick="square7Animate()">
+							<div id="square3" class="square" onclick="animateSquare(3)">
 							  <div class="O"></div>
 							  <div class="X"></div>
 							</div>
@@ -107,7 +81,7 @@
 					</td>
 					<td>
 						<div class="photo-container">
-							<div id="square7" class="square" onclick="square8Animate()">
+							<div id="square4" class="square" onclick="animateSquare(4)">
 							  <div class="O"></div>
 							  <div class="X"></div>
 							</div>
@@ -115,7 +89,33 @@
 					</td>
 					<td>
 						<div class="photo-container">
-							<div id="square8"  class="square" onclick="square9Animate()">
+							<div id="square5" class="square" onclick="animateSquare(5)">
+							  <div class="O"></div>
+							  <div class="X"></div>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="photo-container">
+							<div id="square6" class="square" onclick="animateSquare(6)">
+							  <div class="O"></div>
+							  <div class="X"></div>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div class="photo-container">
+							<div id="square7" class="square" onclick="animateSquare(7)">
+							  <div class="O"></div>
+							  <div class="X"></div>
+							</div>
+						</div>
+					</td>
+					<td>
+						<div class="photo-container">
+							<div id="square8"  class="square" onclick="animateSquare(8)">
 							  <div class="O"></div>
 							  <div class="X"></div>
 							</div>
@@ -140,7 +140,7 @@
 			var arrayO = document.getElementsByClassName("O");
 			var arrayX = document.getElementsByClassName("X");
 			for (var i = 0; i < arrayO.length; i++) {
-			    // Initialize all avatar graphics to not be displayed. To display, set translateY(0%) 
+			    // Initialize all avatar graphics to be hidden. To display, set translateY(0%) 
 				arrayO[i].style.transform = "translateY(-100%)"; 
 			}
 			for (var i=0; i<arrayX.length;i++) {

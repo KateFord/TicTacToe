@@ -1,72 +1,65 @@
-// This function will get fired once the DOM is loaded.
-// Disable the stop button since it is not needed until game start.
 window.onload = function() {watch()};
 function watch() {
 	btnDisabled("btnStop"); 
 }
 
-// this function will roll for random number twice, one for
-// each player and determine which player won the roll.
+// Returns the winner of the roll as a string
 function rollForTurn() {
-	//var xArray = [];
 	var minimum = 1;
 	var maximum = 11;
     var first = "";
     var outputMsg = "";
 	var outputMsgPlayers = "";
 	
-    diceRoll(); // play dice sounds during the game roll for turn
+    diceRoll(); 
 		
 	var pOne = Math.floor(Math.random()*(maximum - minimum) + minimum);
 	var pTwo = Math.floor(Math.random()*(maximum - minimum) + minimum);
-		
     
 	writeMsg("Player 1 rolled [" + pOne + "]<br>");
 	outputMsg = "Player 1 rolled [" + pOne + "]<br> Player 2 rolled [" + pTwo + "]<br><br>";
-	setTimeout(function() {writeMsg(outputMsg);}, 1000); // time delay for dramatic affect
+	setTimeout(function() {writeMsg(outputMsg);}, 1000);
    
-	// determine and concatenate string showing which player won the roll
+	// determine which player won the roll
     if (pOne > pTwo) {
     	first = "Player 1";
-        setTimeout(function(){ outputMsg = outputMsg + "Player 1 wins, please choose a square.";}, 2000);
+        setTimeout(function(){ outputMsg = outputMsg + "Player 1 wins, please select a square.";}, 2000);
     	setTimeout(function() {writeMsg(outputMsg);}, 2000);
     } else if (pOne < pTwo) {
     	first = "Player 2";
-        setTimeout(function(){ outputMsg = outputMsg + "Player 2 wins, please choose a square.";}, 2000);
+        setTimeout(function(){ outputMsg = outputMsg + "Player 2 wins, please select a square.";}, 2000);
     	setTimeout(function() {writeMsg(outputMsg);}, 2000);
     }
-	// pass which player won the roll
+	
     return first;
 }
 
-//-----------------------------------------------------------------
-// initiate the game, roll for turn & determine the active player
-//-----------------------------------------------------------------
+//-------------------------------------------------------------------------------
+// Initiate the game, roll for turn, reroll on ties & determine the active player
+//-------------------------------------------------------------------------------
 function startGame() {
-	var avatarArray = getAvatars(); // returns an array of both player's assigned avatars
+	var avatarArray = getAvatars(); 
 	p1Avatar = avatarArray[0];
 	p2Avatar = avatarArray[1];
 	
 	var xTurn = 0;
 	activePlayer = rollForTurn();
-    if (activePlayer == "") { // if it was a tie, then reroll
+    if (activePlayer == "") { 
     	activePlayer = rollForTurn();
     }
 	setTimeout(function() {hideGameMsg();}, 4000);
 	
-	// assign proper state of the control buttons
 	var btn = document.getElementById('btnStart');
-	btnDisabled(btn);  // disable the start button since the game is now afoot
+	btnDisabled(btn); 
 	var btn = document.getElementById('btnStop');
-	stopEnabled(btn);  // enable the stop button since the game is now afoot
-	
-	//Assign the Active Player to the console
+	stopEnabled(btn); 
+
 	var showPlayer = document.getElementById('showPlayer')
 	showPlayer.innerHTML = activePlayer;
 	showPlayer.style.color = "green";
 }
 
-// this function styles the game buttons while they are disabled
+// Styles the game buttons while they are disabled
 function btnDisabled(btn) {
 	btn.style.color = "fff";
 	btn.style.border = "2px solid rgb(153, 153, 102)";
@@ -74,7 +67,7 @@ function btnDisabled(btn) {
 	btn.disabled = true;
 }
 
-// this function styles the game buttons while they are disabled
+// Styles the game buttons while they are disabled
 function stopEnabled(btn) {
 	btn.style.color = "#fff";
 	btn.style.border = "2px solid rgb(204, 0, 0)";
@@ -82,7 +75,7 @@ function stopEnabled(btn) {
 	btn.disabled = false;
 }
 
-// this function styles the game buttons while they are disabled
+// Styles the game buttons while they are disabled
 function startEnabled(btn) {
 	btn.style.color = "#fff";
 	btn.style.border = "2px solid rgb(0, 153, 0)";
@@ -90,18 +83,18 @@ function startEnabled(btn) {
 	btn.disabled = false;
 }
 
-// when the user indicates, stop the current game and reset game
+// Stop and reset the game
 function stopGame() {
-	hideGameMsg(); // clear the text and hide message box
+	hideGameMsg();
 	var btn = document.getElementById('btnStart');
-	startEnabled(btn); // enable the start button since the game is now stopped
+	startEnabled(btn);
 	var btn = document.getElementById('btnStop');
-	btnDisabled(btn); // disable the stop button since the game is now stopped
+	btnDisabled(btn);
 	var showPlayer = document.getElementById('showPlayer')
 	showPlayer.innerHTML = "Game Stopped";
 	showPlayer.style.color='red';
 	
-	// reset all squares to their starting empty state.
+	// Reset all squares to their initial empty state.
 	var arrayO = document.getElementsByClassName("O");
 	var arrayX = document.getElementsByClassName("X");
 	for (var i=0; i<arrayO.length;i++) {
@@ -110,34 +103,33 @@ function stopGame() {
 	for (var i=0; i<arrayX.length;i++) {
 		arrayX[i].style.transform = "translateY(100%)";
 	}
-	// this clears the running log of all game moves
+	// Clear the running log of all game moves
 	document.getElementById('boardState').innerHTML = "";
 }
 
-// this function will show the message console and any text it may have
+//-------------------------------------------------------------------------------
+// Game message console functions
+//-------------------------------------------------------------------------------
 function showGameMsg() {
 	document.getElementById('gameMsgBox').style.display = 'block';
 }
 
-// this function will conceal the message console from view
 function hideGameMsg() {
-	clearMsg() // clear the text from the message console
-	document.getElementById('gameMsgBox').style.display = 'none'; // hide the div
+	clearMsg() 
+	document.getElementById('gameMsgBox').style.display = 'none'; 
 }
 
-// this function will write text to the game message console
 function writeMsg(txt) {
 	showGameMsg();
 	document.getElementById('gameMsg').innerHTML = txt;
 }
 
-// this function will clear the text from the message console
 function clearMsg() {
 	document.getElementById('gameMsg').innerHTML = "";
 }
 
-// this function is for the player configuration panel and checks the  
-// proposed avatar assignments and prevents them from being the same.
+// Checks the proposed avatar assignments in the configuration panel and prevents them
+// from being the same.
 function saveSettings() {
 	var p1Index = document.getElementById("player1").selectedIndex;
     var p1Selected = document.getElementById("player1").options;
@@ -156,7 +148,7 @@ function saveSettings() {
 	writeMsg(outputMsg);
 }
 
-// this function returns the currently assigned avatar for each player
+// Returns the currently assigned avatar for each player
 function getAvatars() {
 	var p1Avatar = document.getElementById("p1Display").innerHTML;
     var p2Avatar = document.getElementById("p2Display").innerHTML;
@@ -164,107 +156,103 @@ function getAvatars() {
 	return avatarArray;
 }
 
-// this function will return the active player's avatar
+// Returns the active player's avatar
 function determineAvatar() {
-	// determine the correct avatar to paint for the active player
-	var avatarArray = getAvatars(); // returns an array of both player's assigned avatars
-	var active = document.getElementById('showPlayer').innerHTML; // get active player
+	
+	var avatarArray = getAvatars();
+	var active = document.getElementById('showPlayer').innerHTML;
 	p1Avatar = avatarArray[0];
 	p2Avatar = avatarArray[1];
-	if (active == "Player 1") { // check which player is active and their corresponding avatar
+	if (active == "Player 1") {
 		var paintAvatar = p1Avatar;
 	} else if (active == "Player 2") {
 		var paintAvatar = p2Avatar;
 	}
-	return paintAvatar; // returned back the correct avatar
+	return paintAvatar; 
 }
 
-// this function changes active player over to the other player
+// Changes active player
 function avatarPlaced() {
 	var parseText = document.getElementById('gameMsg').innerHTML;
-	var showPlayer = document.getElementById('showPlayer'); // select the current element to memory
-	// check if there is already a winner...if there is, then dont continue the game
+	var showPlayer = document.getElementById('showPlayer');
+	
 	if (parseText == "That's three in a row, Player 1 wins!" || parseText == "That's three in a row, Player 2 wins!"){
 		showPlayer.innerHTML = "Game Stopped";
 		showPlayer.style.color='red';
 	}
-	activePlayer = showPlayer.innerHTML; // get the current player from the element
-	if (activePlayer == "Player 1") { // once active player selects a square change the active player
+	activePlayer = showPlayer.innerHTML;
+	if (activePlayer == "Player 1") {
 		showPlayer.innerHTML = "Player 2";
 	} else {
 		showPlayer.innerHTML = "Player 1";
 	}
-	check4Tie(); // call this function to inquire if there was a cat's game.
+	check4Tie();
 }
 
-// this function will get the array of the current board 
-// and check the proposed move for a validity
+// With the current board array, checks the validity of proposed move
 function check(info,square) {
 	for (var i in info) {
-    	var tempInfo = info[i].charAt(0); // comparing index of square
+    	var tempInfo = info[i].charAt(0); 
         if (tempInfo == square) {
         	return tempInfo;
         }
     }
 }
 
-// as squares are selected they check in with this function to see if that particular 
-// square has already been assigned and if it has not, record new square with the assigned avatar.
+// As squares are selected, checking to see if it has already been assigned. If not,
+// record the new square with it's assigned avatar.
 function recordMoves(square) {
 	var proposedMove = square;
-	var boardState = document.getElementById('boardState').innerHTML; // retrieve boardState array
-	var info = boardState.split(','); // separate the string by commas to create an array
-	verdict = check(info,square); // call function to check if proposed square is already occupied
+	var boardState = document.getElementById('boardState').innerHTML;
+	var info = boardState.split(',');
+	verdict = check(info,square);
 	return verdict;
 }
 
-// this function will get list of previous moves 
-// and then concatenate the current move to it.
+// Records and adds latest move to list of previous moves
 function recordMove(currentMove) {
 	var target = document.getElementById('boardState');
 	var previousMoves = target.innerHTML;
 	target.innerHTML = previousMoves+currentMove;
 }
 
-function checkForWinCon() {
+function checkForWinningConditions() {
 	var squareArray = [];
 	var target = document.getElementById('boardState');
-	var info = target.innerHTML; // raw array with squares and avatars
-	info = info.substring(1); // remove leading comma
-	info = info.split(','); // separate the string by commas into an array
-    info.sort(); // sort the square array in order despite the actual gameplay sequence
+	var info = target.innerHTML; 
+	info = info.substring(1);
+	info = info.split(',');
+    info.sort(); 
     for (var i in info) {
-    	squareArray.push(info[i].charAt(0)); // new array with only squares not avatars
+    	squareArray.push(info[i].charAt(0));
     }
-    // call this following array of functions to check for any of the possible win cons
-	checkWinCon1(info,squareArray);
-    checkWinCon2(info,squareArray);
-    checkWinCon3(info,squareArray);
-    checkWinCon4(info,squareArray);
-    checkWinCon5(info,squareArray);
-    checkWinCon6(info,squareArray);
-    checkWinCon7(info,squareArray);
-    checkWinCon8(info,squareArray);
-	//console.log("New CHECK: "+document.getElementById('gameMsg').innerHTML);
+    // Check for winning conditions
+	checkForEachWinningCondition(info,[0,1,2]);
+    checkForEachWinningCondition(info,[3,4,5]);
+    checkForEachWinningCondition(info,[6,7,8]);
+    checkForEachWinningCondition(info,[0,3,6]);
+    checkForEachWinningCondition(info,[1,4,7]);
+    checkForEachWinningCondition(info,[2,5,8]);
+    checkForEachWinningCondition(info,[6,4,2]);
+    checkForEachWinningCondition(info,[0,4,8]);
 	check4Tie();
 }
 
-// call this function to check board state for any ties and act accordingly
+// Checks board state for ties and act accordingly
 function check4Tie() {
 	var boardState = document.getElementById('boardState').innerHTML;
-	boardState = boardState.substring(1); // remove leading comma
-	boardState = boardState.split(','); // separate the string by commas into an array
+	boardState = boardState.substring(1); 
+	boardState = boardState.split(','); 
 	var check = document.getElementById('gameMsg').innerHTML;
 	if(boardState.length >= 9 && check != "That's three in a row, Player 1 wins!" && check != "That's three in a row, Player 2 wins!") {
 		var outputMsg = "Oh no! Nobody wins, it was a tie!";
-		tieSound(); // play a sound when a tie has been detected
+		tieSound();
 		writeMsg(outputMsg);
 		setTimeout(function() {stopGame();}, 3000);
 	}
 }
 
-// whenever a win is detected the corresponding function will 
-// call this function to produce the following winning process for the game
+// Whenever a win is detected, a message is written to the game console, styling is changed and sounds are played.
 function winner(winDetected,winCon) {
 	if (winDetected == "win") {
 		var showme = winDetected;
@@ -272,15 +260,15 @@ function winner(winDetected,winCon) {
 		var txt2 = "That's three in a row, "+activePlayer+" wins!";
 		writeMsg(txt2);
 		var btn = document.getElementById('btnStart');
-		startEnabled(btn); // enable the start button since the game is now stopped
+		startEnabled(btn);
 		var btn = document.getElementById('btnStop');
-		btnDisabled(btn); // disable the stop button since the game is now stopped
+		btnDisabled(btn);
 		document.getElementById('showPlayer').innerHTML = "Game Stopped";
-		glowBoard(winCon); // call function to make the gameboard pulse with colors
+		glowBoard(winCon);
 	} 
 }
 
-// this function will make the winning squares light up in celebration
+// Styles the winning squares to light up in celebration
 function glowBoard(pos) {
 	var index0 = pos[0];
 	var index1 = pos[1];
@@ -333,11 +321,11 @@ function glowBoard(pos) {
 	setTimeout(function() {stopGame();}, 1200);
 }
 
-// these functions will produce game sounds depending on the occasion
+// Produce sounds for each occasion
 function squareSound() { 
 	var sound = document.getElementById("placeAvatar");
     sound.play();
-	setTimeout(function() {sound.pause();}, 400); // add delay to these to keep sound short
+	setTimeout(function() {sound.pause();}, 400);
 	setTimeout(function() {sound.currentTime = 0;}, 500);
 }
 function tieSound() { 
@@ -348,7 +336,7 @@ function tieSound() {
 function winSound() { 
 	var sound = document.getElementById("winGame");
 	setTimeout(function() {sound.play();}, 500);
-	setTimeout(function() {sound.pause();}, 2700); // add delay to these to keep sound short
+	setTimeout(function() {sound.pause();}, 2700); 
 	setTimeout(function() {sound.currentTime = 0;}, 2800);
 }
 function diceRoll() { 
@@ -356,8 +344,7 @@ function diceRoll() {
 	sound.play();
 }
 
-// call this function to make entire background color 
-// flash for a few seconds for a win animation
+// Change the background color and allow to flash  for a win animation
 function blink() {
 	var body = document.getElementById('body');
 	setTimeout(function() {body.style.backgroundColor = '#94f7ed';}, 100);
@@ -373,418 +360,76 @@ function blink() {
 	setTimeout(function() {body.style.backgroundColor = '#ffffff';}, 1100);
 }
 
-// -------------------------------------------------------------
-// These function are the algorithms to find all win conditions
-// -------------------------------------------------------------
-// checking for wincon squares 012
-function checkWinCon1(info,squareArray) {
-	var winDetected = "on";
-	var winCon1 = [0,1,2];
-	// iterate through the growing array during 
-	// gametime searching for the existence of 
-	// index 0, index 1 and index 2 and once they
-	// they do appear in the array, record their 
-	// avatars and compare all 3 for win cons
-	for (var i in info) {
-		if (info[i].charAt(0) == "0") {
-			var match0Avatar = info[i].charAt(1); // only interested in recording the avatar
-		}
-		if (info[i].charAt(0) == "1") {
-			var match1Avatar = info[i].charAt(1);
-		}
-		if (info[i].charAt(0) == "2") {
-			var match2Avatar = info[i].charAt(1);
-		}
-	}
-	// this will trigger (ONLY) if there was a match for index0, index1, and index2
-	if (match0Avatar != undefined && match1Avatar != undefined && match2Avatar != undefined) {
-		if (match0Avatar == match1Avatar && match0Avatar == match2Avatar) {
-			winDetected = "win"; // this flag will pass when a win has been detected
-			winner(winDetected,winCon1);
-			return;
-		}
-	}
-	winner(winDetected,winCon1); // winCon1 is the array of win combo
-}
-
-// checking for wincon squares 345
-function checkWinCon2(info,squareArray) {
-	var winCon2 = [3,4,5];
-	var winDetected = "on";
-	for (var i in info) {
-		if (info[i].charAt(0) == "3") {
-			var match3Avatar = info[i].charAt(1); // only interested in recording the avatar
-		}
-		if (info[i].charAt(0) == "4") {
-			var match4Avatar = info[i].charAt(1);
-		}
-		if (info[i].charAt(0) == "5") {
-			var match5Avatar = info[i].charAt(1);
-		}
-	}
-	if (match3Avatar != undefined && match4Avatar != undefined && match5Avatar != undefined) { // this will trigger (ONLY) if there was a match for index3, index4, and index5
-		if (match3Avatar == match4Avatar && match3Avatar == match5Avatar) {
-			winDetected = "win";
-		}
-	}
-	winner(winDetected,winCon2);
-}
-
-// checking for wincon squares 678
-function checkWinCon3(info,squareArray) {
-	var winCon3 = [6,7,8];
-	var winDetected = "on";
-	for (var i in info) {
-		if (info[i].charAt(0) == "6") {
-			var match6Avatar = info[i].charAt(1); // only interested in recording the avatar
-		}
-		if (info[i].charAt(0) == "7") {
-			var match7Avatar = info[i].charAt(1);
-		}
-		if (info[i].charAt(0) == "8") {
-			var match8Avatar = info[i].charAt(1);
-		}
-	}
-	if (match6Avatar != undefined && match7Avatar != undefined && match8Avatar != undefined) {
-		if (match6Avatar == match7Avatar && match6Avatar == match8Avatar) {
-			winDetected = "win";
-		}
-	}
-	winner(winDetected,winCon3);
-}
-
-// checking for wincon squares 036
-function checkWinCon4(info,squareArray) {
-	var winCon4 = [0,3,6];
-	var winDetected = "on";
-	for (var i in info) {
-		if (info[i].charAt(0) == "0") {
-			var match0Avatar = info[i].charAt(1); // only interested in recording the avatar
-		}
-		if (info[i].charAt(0) == "3") {
-			var match3Avatar = info[i].charAt(1);
-		}
-		if (info[i].charAt(0) == "6") {
-			var match6Avatar = info[i].charAt(1);
-		}
-	}
-	if (match0Avatar != undefined && match3Avatar != undefined && match6Avatar != undefined) {
-		if (match0Avatar == match3Avatar && match0Avatar == match6Avatar) {
-			winDetected = "win";
-		}
-	}
-	winner(winDetected,winCon4);
-}
-
-// checking for wincon squares 147
-function checkWinCon5(info,squareArray) {
-	var winCon5 = [1,4,7];
-	var winDetected = "on";
-	for (var i in info) {
-		if (info[i].charAt(0) == "1") {
-			var match1Avatar = info[i].charAt(1); // only interested in recording the avatar
-		}
-		if (info[i].charAt(0) == "4") {
-			var match4Avatar = info[i].charAt(1);
-		}
-		if (info[i].charAt(0) == "7") {
-			var match7Avatar = info[i].charAt(1);
-		}
-	}
-	if (match1Avatar != undefined && match4Avatar != undefined && match7Avatar != undefined) {
-		if (match1Avatar == match4Avatar && match1Avatar == match7Avatar) {
-			winDetected = "win";
-		}
-	}
-	winner(winDetected,winCon5);
-}
-
-// checking for wincon squares 258
-function checkWinCon6(info,squareArray) {
-	var winCon6 = [2,5,8];
-	var winDetected = "on";
-	for (var i in info) {
-		if (info[i].charAt(0) == "2") {
-			var match2Avatar = info[i].charAt(1); // only interested in recording the avatar
-		}
-		if (info[i].charAt(0) == "5") {
-			var match5Avatar = info[i].charAt(1);
-		}
-		if (info[i].charAt(0) == "8") {
-			var match8Avatar = info[i].charAt(1);
-		}
-	}
-	if (match2Avatar != undefined && match5Avatar != undefined && match8Avatar != undefined) {
-		if (match2Avatar == match5Avatar && match2Avatar == match8Avatar) {
-			winDetected = "win";
-		}
-	}
-	winner(winDetected,winCon6);
-}
-
-// checking for wincon squares 642
-function checkWinCon7(info,squareArray) {
-	var winCon7 = [6,4,2];
-	var winDetected = "on";
-	for (var i in info) {
-		if (info[i].charAt(0) == "6") {
-			var match6Avatar = info[i].charAt(1); // only interested in recording the avatar
-		}
-		if (info[i].charAt(0) == "4") {
-			var match4Avatar = info[i].charAt(1);
-		}
-		if (info[i].charAt(0) == "2") {
-			var match2Avatar = info[i].charAt(1);
-		}
-	}
-	if (match6Avatar != undefined && match4Avatar != undefined && match2Avatar != undefined) {
-		if (match6Avatar == match4Avatar && match6Avatar == match2Avatar) {
-			winDetected = "win";
-		}
-	}
-	winner(winDetected,winCon7);
-}
-
-// checking for wincon squares 048
-function checkWinCon8(info,squareArray) {
-	var winCon8 = [0,4,8];
-	var winDetected = "on";
-	for (var i in info) {
-		if (info[i].charAt(0) == "0") {
-			var match0Avatar = info[i].charAt(1); // only interested in recording the avatar
-		}
-		if (info[i].charAt(0) == "4") {
-			var match4Avatar = info[i].charAt(1);
-		}
-		if (info[i].charAt(0) == "8") {
-			var match8Avatar = info[i].charAt(1);
-		}
-	}
-	if (match0Avatar != undefined && match4Avatar != undefined && match8Avatar != undefined) {
-		if (match0Avatar == match4Avatar && match0Avatar == match8Avatar) {
-			winDetected = "win";
-		}
-	}
-	winner(winDetected,winCon8);
-}
-
-//---------------------------------------------------------------------------------------
-// These block of functions are for each click event of their corresponding square element
-//---------------------------------------------------------------------------------------
-function square1Animate() {
-	var activePlayer = document.getElementById('showPlayer').innerHTML;
-	if (activePlayer != "Game Stopped") { // if game has not yet started prevent avatar placement
-		var square = "0"; // identify the square selected
-		// check if the proposed square is valid
-		var verdict = recordMoves(square);
-		if (verdict == undefined) { // if verdict is empty than the square is unoccupied.
-			var paintAvatar = determineAvatar(); // get the correct avatar to paint for the active player
-			var selected = document.getElementsByClassName(paintAvatar)[0]; // paint avatar
-			if (paintAvatar == "O") { // change these all to ternary satetments instead
-				animateO(selected); // call function to animate O
-			} else if (paintAvatar == "X") {
-				animateX(selected); // call function to animate X
-			}
-			// build new array adding the newly selected square and the assigned avatar
-			var currentMove = ","+square+paintAvatar;
-			recordMove(currentMove);
-			checkForWinCon(); // call function to check if current move completes a winning condition.
-			avatarPlaced(square,paintAvatar); // end current turn and pass the turn to the other player
-			squareSound(); // play a game sound when the avatar is placed
-		}
-	}
-}
-function square2Animate() {
-	var activePlayer = document.getElementById('showPlayer').innerHTML;
-	if (activePlayer != "Game Stopped") { // if game has not yet started prevent avatar placement
-		var square = "1"; // identify the square selected
-		// check if the proposed square is valid
-		var verdict = recordMoves(square);
-		if (verdict == undefined) { // if verdict is empty than the square is unoccupied.
-			var paintAvatar = determineAvatar(); // get the correct avatar to paint for the active player
-			var selected = document.getElementsByClassName(paintAvatar)[1]; // paint avatar
-			if (paintAvatar == "O") { // change these all to ternary satetments instead
-				animateO(selected); // call function to animate O
-			} else if (paintAvatar == "X") {
-				animateX(selected); // call function to animate X
-			}
-			// build new array adding the newly selected square and the assigned avatar
-			var currentMove = ","+square+paintAvatar;
-			recordMove(currentMove);
-			checkForWinCon(); // call function to check if current move completes a winning condition.
-			avatarPlaced(square,paintAvatar); // end current turn and pass the turn to the other player
-			squareSound(); // play a game sound when the avatar is placed
-		}
-	}
-}
-function square3Animate() {
-	var activePlayer = document.getElementById('showPlayer').innerHTML;
-	if (activePlayer != "Game Stopped") { // if game has not yet started prevent avatar placement
-		var square = "2"; // identify the square selected
-		// check if the proposed square is valid
-		var verdict = recordMoves(square);
-		if (verdict == undefined) { // if verdict is empty than the square is unoccupied.
-			var paintAvatar = determineAvatar(); // get the correct avatar to paint for the active player
-			var selected = document.getElementsByClassName(paintAvatar)[2]; // paint avatar
-			if (paintAvatar == "O") { // change these all to ternary satetments instead
-				animateO(selected); // call function to animate O
-			} else if (paintAvatar == "X") {
-				animateX(selected); // call function to animate X
-			}
-			// build new array adding the newly selected square and the assigned avatar
-			var currentMove = ","+square+paintAvatar;
-			recordMove(currentMove);
-			checkForWinCon(); // call function to check if current move completes a winning condition.
-			avatarPlaced(square,paintAvatar); // end current turn and pass the turn to the other player
-			squareSound(); // play a game sound when the avatar is placed
-		}
-	}
-}
-function square4Animate() {
-	var activePlayer = document.getElementById('showPlayer').innerHTML;
-	if (activePlayer != "Game Stopped") { // if game has not yet started prevent avatar placement
-		var square = "3"; // identify the square selected
-		// check if the proposed square is valid
-		var verdict = recordMoves(square);
-		if (verdict == undefined) { // if verdict is empty than the square is unoccupied.
-			var paintAvatar = determineAvatar(); // get the correct avatar to paint for the active player
-			var selected = document.getElementsByClassName(paintAvatar)[3]; // paint avatar
-			if (paintAvatar == "O") { // change these all to ternary satetments instead
-				animateO(selected); // call function to animate O
-			} else if (paintAvatar == "X") {
-				animateX(selected); // call function to animate X
-			}
-			// build new array adding the newly selected square and the assigned avatar
-			var currentMove = ","+square+paintAvatar;
-			recordMove(currentMove);
-			checkForWinCon(); // call function to check if current move completes a winning condition.
-			avatarPlaced(square,paintAvatar); // end current turn and pass the turn to the other player
-			squareSound(); // play a game sound when the avatar is placed
-		}
-	}
-}
-function square5Animate() {
-	var activePlayer = document.getElementById('showPlayer').innerHTML;
-	if (activePlayer != "Game Stopped") { // if game has not yet started prevent avatar placement
-		var square = "4"; // identify the square selected
-		// check if the proposed square is valid
-		var verdict = recordMoves(square);
-		if (verdict == undefined) { // if verdict is empty than the square is unoccupied.
-			var paintAvatar = determineAvatar(); // get the correct avatar to paint for the active player
-			var selected = document.getElementsByClassName(paintAvatar)[4]; // paint avatar
-			if (paintAvatar == "O") { // change these all to ternary satetments instead
-				animateO(selected); // call function to animate O
-			} else if (paintAvatar == "X") {
-				animateX(selected); // call function to animate X
-			}
-			// build new array adding the newly selected square and the assigned avatar
-			var currentMove = ","+square+paintAvatar;
-			recordMove(currentMove);
-			checkForWinCon(); // call function to check if current move completes a winning condition.
-			avatarPlaced(square,paintAvatar); // end current turn and pass the turn to the other player
-			squareSound(); // play a game sound when the avatar is placed
-		}
-	}
-}
-function square6Animate() {
-	var activePlayer = document.getElementById('showPlayer').innerHTML;
-	if (activePlayer != "Game Stopped") { // if game has not yet started prevent avatar placement
-		var square = "5"; // identify the square selected
-		// check if the proposed square is valid
-		var verdict = recordMoves(square);
-		if (verdict == undefined) { // if verdict is empty than the square is unoccupied.
-			var paintAvatar = determineAvatar(); // get the correct avatar to paint for the active player
-			var selected = document.getElementsByClassName(paintAvatar)[5]; // paint avatar
-			if (paintAvatar == "O") { // change these all to ternary satetments instead
-				animateO(selected); // call function to animate O
-			} else if (paintAvatar == "X") {
-				animateX(selected); // call function to animate X
-			}
-			// build new array adding the newly selected square and the assigned avatar
-			var currentMove = ","+square+paintAvatar;
-			recordMove(currentMove);
-			checkForWinCon(); // call function to check if current move completes a winning condition.
-			avatarPlaced(square,paintAvatar); // end current turn and pass the turn to the other player
-			squareSound(); // play a game sound when the avatar is placed
-		}
-	}
-}
-function square7Animate() {
-	var activePlayer = document.getElementById('showPlayer').innerHTML;
-	if (activePlayer != "Game Stopped") { // if game has not yet started prevent avatar placement
-		var square = "6"; // identify the square selected
-		// check if the proposed square is valid
-		var verdict = recordMoves(square);
-		if (verdict == undefined) { // if verdict is empty than the square is unoccupied.
-			var paintAvatar = determineAvatar(); // get the correct avatar to paint for the active player
-			var selected = document.getElementsByClassName(paintAvatar)[6]; // paint avatar
-			if (paintAvatar == "O") { // change these all to ternary satetments instead
-				animateO(selected); // call function to animate O
-			} else if (paintAvatar == "X") {
-				animateX(selected); // call function to animate X
-			}
-			// build new array adding the newly selected square and the assigned avatar
-			var currentMove = ","+square+paintAvatar;
-			recordMove(currentMove);
-			checkForWinCon(); // call function to check if current move completes a winning condition.
-			avatarPlaced(square,paintAvatar); // end current turn and pass the turn to the other player
-			squareSound(); // play a game sound when the avatar is placed
-		}
-	}
-}
-function square8Animate() {
-	var activePlayer = document.getElementById('showPlayer').innerHTML;
-	if (activePlayer != "Game Stopped") { // if game has not yet started prevent avatar placement
-		var square = "7"; // identify the square selected
-		// check if the proposed square is valid
-		var verdict = recordMoves(square);
-		if (verdict == undefined) { // if verdict is empty than the square is unoccupied.
-			var paintAvatar = determineAvatar(); // get the correct avatar to paint for the active player
-			var selected = document.getElementsByClassName(paintAvatar)[7]; // paint avatar
-			if (paintAvatar == "O") { // change these all to ternary satetments instead
-				animateO(selected); // call function to animate O
-			} else if (paintAvatar == "X") {
-				animateX(selected); // call function to animate X
-			}
-			// build new array adding the newly selected square and the assigned avatar
-			var currentMove = ","+square+paintAvatar;
-			recordMove(currentMove);
-			checkForWinCon(); // call function to check if current move completes a winning condition.
-			avatarPlaced(square,paintAvatar); // end current turn and pass the turn to the other player
-			squareSound(); // play a game sound when the avatar is placed
-		}
-	}
-}
-function square9Animate() {
-	var activePlayer = document.getElementById('showPlayer').innerHTML;
-	if (activePlayer != "Game Stopped") { // if game has not yet started prevent avatar placement
-		var square = "8"; // identify the square selected
-		// check if the proposed square is valid
-		var verdict = recordMoves(square);
-		if (verdict == undefined) { // if verdict is empty than the square is unoccupied.
-			var paintAvatar = determineAvatar(); // get the correct avatar to paint for the active player
-			var selected = document.getElementsByClassName(paintAvatar)[8]; // paint avatar
-			if (paintAvatar == "O") { // change these all to ternary satetments instead
-				animateO(selected); // call function to animate O
-			} else if (paintAvatar == "X") {
-				animateX(selected); // call function to animate X
-			}
-			// build new array adding the newly selected square and the assigned avatar
-			var currentMove = ","+square+paintAvatar;
-			recordMove(currentMove);
-			checkForWinCon(); // call function to check if current move completes a winning condition.
-			avatarPlaced(square,paintAvatar); // end current turn and pass the turn to the other player
-			squareSound(); // play a game sound when the avatar is placed
-		}
-	}
-}
-
-// this function will perform the animation for the O avatar.
+// Animate the "O" avatar
 function animateO(selected) {
 	selected.style.transform = (selected.style.transform == "translateY(-100%)" || null) ? "translateY(0)" : "translateY(-100%)";
 }
 
-// this function will perform the animation for the X avatar.
+// Animate the "X" avatar
 function animateX(selected) {
 	selected.style.transform = (selected.style.transform == "translateY(100%)" || null) ? "translateY(0%)" : "translateY(100%)";
 }
+
+// ---------------------------------------------------------------------------------
+// Algorithms to find all winning conditions
+// Iterate through the growing array during gametime searching for the existence of 
+// index 0, index 1 and index 2 and once they they appear in the array, record their 
+// avatars and compare all 3 for wining conditions.
+// ----------------------------------------------------------------------------------
+function checkForEachWinningCondition(info,squareArray) {
+	
+	var winDetected = "on";
+
+	for (var i in info) {
+		if (info[i].charAt(0) == squareArray[0].toString()) {
+			var match0Avatar = info[i].charAt(1);
+		}
+		if (info[i].charAt(0) == squareArray[1].toString()) {
+			var match1Avatar = info[i].charAt(1);
+		}
+		if (info[i].charAt(0) == squareArray[2].toString()) {
+			var match2Avatar = info[i].charAt(1);
+		}
+	}
+
+	if (match0Avatar != undefined && match1Avatar != undefined && match2Avatar != undefined) {
+		if (match0Avatar == match1Avatar && match0Avatar == match2Avatar) {
+			winDetected = "win";
+			winner(winDetected,squareArray);
+			return;
+		}
+	}
+	winner(winDetected,squareArray);
+}
+
+//---------------------------------------------------------------------------------------
+// Function called from the on-click event 
+// Identifies the square selected and checks for validity of proposed square.
+// Paints the correct avatar for the active player, animates O and X. 
+// Checks for winning conditions before passing turn to other player.
+//---------------------------------------------------------------------------------------
+function animateSquare(squareNumber) {
+	var activePlayer = document.getElementById('showPlayer').innerHTML;
+	if (activePlayer != "Game Stopped") { 
+		var square = squareNumber.toString(); 
+		
+		var verdict = recordMoves(square);
+		if (verdict == undefined) { 
+			var paintAvatar = determineAvatar(); 
+			var selected = document.getElementsByClassName(paintAvatar)[squareNumber]; 
+			if (paintAvatar == "O") { 
+				animateO(selected); 
+			} else if (paintAvatar == "X") {
+				animateX(selected); 
+			}
+			
+			var currentMove = ","+square+paintAvatar;
+			recordMove(currentMove);
+			checkForWinningConditions();
+			avatarPlaced(square,paintAvatar);
+			squareSound();
+		}
+	}
+}
+
+
