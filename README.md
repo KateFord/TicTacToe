@@ -3,4 +3,3 @@ A Simple 2-player tic tac toe game created using Javascript (jQuery) at The Tech
 
 Game logic is contained within file *tictactoe.js*
 
-Demo is available at: [http://kateford.github.io/tictactoe.html]
