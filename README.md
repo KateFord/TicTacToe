@@ -1,5 +1,6 @@
-# Tic tac toe JS game
-A Simple 2-player tic tac toe game created using Javascript (jQuery) at The Tech Academy as part of the JavaScript Module. 
+# Naughts & Crosses JavaScript Game
+
+A Simple 2-player game of Naughts & Crosses, otherwise know as Tic Tac Toe. It was created using Javascript at The Tech Academy as part of the JavaScript Module.
 
 Game logic is contained within file *tictactoe.js*
 
